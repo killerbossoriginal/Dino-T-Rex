@@ -68,6 +68,13 @@ end
 
 update = function()
   posizione = posizione+2
+
+  if touch.touching and eroe_y == 0 then
+    eroe_vy = 7
+  end
+  
+  eroe_vy = eroe_vy - 0.3
+  eroe_y = max(0,eroe_y+eroe_vy)
 end
 
 draw = function()
@@ -77,8 +84,9 @@ draw = function()
     screen.drawSprite("muro",i*40-posizione%40,-80,40)
   end
 
-  screen.drawSprite("eroe",-80,-50,20)
+  screen.drawSprite("eroe",-80,-50+eroe_y,20)
 end
+
 end()
 
 
