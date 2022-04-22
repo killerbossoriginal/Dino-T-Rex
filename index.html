@@ -16,7 +16,7 @@
 #canvaswrapper {
   text-align: center ;
 }
-</style><style>@font-face { font-family: "BitCell" ; src: url("fonts/BitCell.ttf") format("truetype"); }</style><script>window.fonts = ["BitCell"]</script></head><body class="noselect custom-cursor" oncontextmenu="return false;"><div id="canvaswrapper"></div><script type="text/javascript">var resources = {"images":[{"file":"eroe.png","version":1,"size":992,"properties":{"frames":1,"fps":5}},{"file":"icon.png","version":0,"size":0,"properties":{}},{"file":"muro.png","version":1,"size":127,"properties":{"frames":1,"fps":5}}],"assets":[],"maps":{},"sounds":[],"music":[]};
+</style><style>@font-face { font-family: "BitCell" ; src: url("fonts/BitCell.ttf") format("truetype"); }</style><script>window.fonts = ["BitCell"]</script></head><body class="noselect custom-cursor" oncontextmenu="return false;"><div id="canvaswrapper"></div><script type="text/javascript">var resources = {"images":[{"file":"eroe.png","version":1,"size":51355,"properties":{"frames":1,"fps":5}},{"file":"icon.png","version":0,"size":0,"properties":{}},{"file":"lama.png","version":1,"size":6996,"properties":{"frames":1,"fps":5}},{"file":"muro.png","version":1,"size":127,"properties":{"frames":1,"fps":5}}],"assets":[],"maps":{},"sounds":[],"music":[]};
 var graphics = "M1";
 
 </script><script type="text/javascript">var orientation = 'any' ;
@@ -64,27 +64,50 @@ window.exported_project = true;
 
 function()
 init = function()
+  lame = [200,300,400]
+  superate = [0,0,0]
 end
 
 update = function()
   posizione = posizione+2
 
   if touch.touching and eroe_y == 0 then
-    eroe_vy = 7
+     eroe_vy = 7
   end
-  
-  eroe_vy = eroe_vy - 0.3
+
+  eroe_vy -= 0.3
   eroe_y = max(0,eroe_y+eroe_vy)
+
+  for i=0 to lame.length-1
+    if lame[i]<posizione-120 then
+      lame[i] = posizione+280+random.next()*200
+      superate[i] = 0
+    end
+    if abs(posizione-lame[i])<10 then
+      if eroe_y<10 then
+        gameover = 1
+      elsif not superate[i] then
+        superate[i] = 1
+        punteggio += 1
+      end
+    end
+  end
 end
 
 draw = function()
-  screen.fillRect(0,0,screen.width,screen.height,"rgb(57,0,57)")
+  screen.fillRect(0,0,screen.width,screen.height,"rgb(255,255,255)")
   
   for i=-6 to 6 by 1
     screen.drawSprite("muro",i*40-posizione%40,-80,40)
-  end
-
+  end 
+  
   screen.drawSprite("eroe",-80,-50+eroe_y,20)
+  
+  for i=0 to lame.length-1
+    screen.drawSprite("lama",lame[i]-posizione-80,-50,20)
+  end
+  
+  screen.drawText(punteggio,120,80,20,"rgb(0,0,0)")
 end
 
 end()
